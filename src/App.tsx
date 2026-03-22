@@ -5,7 +5,15 @@ import { GoogleGenAI } from "@google/genai";
 import { ICEBERG_CARDS, CardData } from './constants';
 
 // Initialize Gemini AI
-const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const getApiKey = () => {
+  const key = import.meta.env.VITE_GEMINI_API_KEY || (window as any)._VITE_GEMINI_API_KEY;
+  if (!key) {
+    console.warn("[Debug] API Key is missing from environment variables.");
+  }
+  return key || '';
+};
+
+const genAI = new GoogleGenAI({ apiKey: getApiKey() });
 
 export default function App() {
   const [view, setView] = useState<'home' | 'draw' | 'gallery'>('home');
